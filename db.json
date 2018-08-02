@@ -26,16 +26,8 @@
       "categoria": "Alimentos"
     },
     {
-      "categoria": "Teste",
-      "id": 3
-    },
-    {
-      "categoria": "Outra",
+      "categoria": "Cosméticos",
       "id": 4
-    },
-    {
-      "categoria": "Mais Uma",
-      "id": 5
     }
   ]
 }

@@ -7,34 +7,90 @@ import Sobre from './Sobre';
 import Produtos from './Produtos';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      categorias: []
+    };
+  }
+
+  loadCategorias = () => {
+    this.props.api.loadCategorias().then(res => {
+      this.setState({
+        categorias: res.data
+      });
+    });
+  };
+
+  removeCategoria = categoria => {
+    this.props.api.deleteCategorias(categoria.id).then(res => {
+      this.loadCategorias();
+    });
+  };
+
+  createCategoria = categoria => {
+    this.props.api.createCategoria(categoria).then(res => {
+      this.loadCategorias();
+    });
+  };
+
+  editCategoria = categoria => {
+    this.props.api.editCategoria(categoria).then(res => {
+      this.loadCategorias();
+    });
+  };
+
   render() {
     return (
       <Router>
         <div>
-          <nav className="navbar navbar-inverse">
+          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container">
-              <div className="navbar-header">
-                <a href="/" className="navbar-brand">
-                  Gerenciador de Produtos
-                </a>
+              <a href="/" className="navbar-brand">
+                Gerenciador de Produtos
+              </a>
+
+              <div className="collapse navbar-collapse" id="navbarNav">
+                <ul className="navbar-nav">
+                  <li className="nav-item ">
+                    <Link className="nav-link" to="/">
+                      Home
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/produtos">
+                      Produtos
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/sobre">
+                      Sobre
+                    </Link>
+                  </li>
+                </ul>
               </div>
-              <ul className="nav navbar-nav">
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/produtos">Produtos</Link>
-                </li>
-                <li>
-                  <Link to="/sobre">Sobre</Link>
-                </li>
-              </ul>
             </div>
           </nav>
+          <br />
+          <br />
           <div className="container">
             <Route exact path="/" component={Home} />
             <Route exact path="/sobre" component={Sobre} />
-            <Route path="/produtos" component={Produtos} />
+            <Route
+              path="/produtos"
+              render={props => {
+                return (
+                  <Produtos
+                    {...props}
+                    loadCategorias={this.loadCategorias}
+                    createCategoria={this.createCategoria}
+                    removeCategoria={this.removeCategoria}
+                    editCategoria={this.editCategoria}
+                    categorias={this.state.categorias}
+                  />
+                );
+              }}
+            />
           </div>
         </div>
       </Router>
